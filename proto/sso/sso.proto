@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "tuzov.sso.v1;ssov1";
+
+// Auth - сервис для управления разрешениями и ролями.
+service Auth {
+  // Register - регистрирует нового пользователя.
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  // Login - вход пользователя и возвращает токен аутентификации.
+  rpc Login (LoginRequest) returns (LoginResponse);
+  // IsAdmin - проверяет, является ли пользователь администратором.
+  rpc IsAdmin (IsAdminRequest) returns (IsAdminResponse);
+  rpc Logout (LogoutRequest) returns (LogoutResponse);
+}
+
+message IsAdminRequest {
+  int64 user_id = 1; // Идентификатор пользователя для проверки.
+}
+
+message IsAdminResponse {
+  bool is_admin = 1; // Указывает, является ли пользователь администратором.
+}
+
+message RegisterRequest {
+  string email = 1; // Электронная почта пользователя для регистрации.
+  string password = 2; // Пароль пользователя для регистрации.
+}
+
+message RegisterResponse {
+  int64 user_id = 1; // Идентификатор зарегистрированного пользователя.
+}
+
+message LoginRequest {
+  string email = 1; // Электронная почта пользователя для входа.
+  string password = 2; // Пароль пользователя для входа.
+  int32 app_id = 3; // Идентификатор приложения для входа.
+}
+
+message LoginResponse {
+  string token = 1; // Токен аутентификации для вошедшего пользователя.
+}
+
+message LogoutRequest {
+  string token = 1; // Токен аутентификации пользователя для выхода.
+}
+
+message LogoutResponse {
+  bool success = 1; // Указывает, был ли выход успешным.
+}
